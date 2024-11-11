@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employers | Request Staff</title>
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Employers | Request Staff</h1>
+        <p class="intro-text">
+            We’re dedicated to connecting you with skilled professionals who elevate your team. Let First Contact be your trusted partner in finding the talent that aligns with your vision. Together, we’ll build the workforce that drives your success.
+        </p>
+        <p class="sub-text">
+            Ready to hire? Share a few details with us, and First Contact will take care of the rest. Let us find the perfect fit to strengthen your team!
+        </p>
+
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name *</label>
+                    <input type="text" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name *</label>
+                    <input type="text" name="last_name" required>
+                </div>
+            </div>
+
+            <label>Email Address *</label>
+            <input type="email" name="email" required>
+
+            <label>Phone Number *</label>
+            <input type="tel" name="phone" required>
+
+            <label>Organization Name *</label>
+            <input type="text" name="organization_name" required>
+
+            <label>Website *</label>
+            <input type="url" name="website" required>
+
+            <label>Title of Position *</label>
+            <input type="text" name="position_title" required>
+
+            <label>Position Type *</label>
+            <select name="position_type" required>
+                <option value="Temporary">Temporary</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Contract">Contract</option>
+                <!-- Add more options if necessary -->
+            </select>
+
+            <label>Position Location *</label>
+            <input type="text" name="position_location" required placeholder="Remote or specify location">
+
+            <label>Salary/Payrate *</label>
+            <input type="text" name="salary" required>
+
+            <label>Upload Job Description if Available</label>
+            <input type="file" name="job_description" accept=".pdf,.doc,.docx">
+
+            <label>Describe Your Requirements</label>
+            <textarea name="requirements" rows="5"></textarea>
+
+            <button type="submit">Submit Request</button>
+        </form>
+    </div>
+</body>
+</html>

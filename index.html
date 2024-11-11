@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Join our team, where every day is an opportunity to impact lives positively.</h2>
+        <p>We’re looking for dedicated individuals who value growth, teamwork, and compassion. Apply now to be part of a supportive community and advance your career!</p>
+
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name *</label>
+                    <input type="text" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name *</label>
+                    <input type="text" name="last_name" required>
+                </div>
+            </div>
+
+            <label>Email Address *</label>
+            <input type="email" name="email" required>
+
+            <label>Phone *</label>
+            <input type="tel" name="phone" maxlength="10" required>
+
+            <label>Country *</label>
+            <select name="country" id="country" required>
+                <option value="">Select a Country</option>
+            </select>
+
+            <label>State/Province *</label>
+            <select name="state" id="state" required>
+                <option value="">Select a State</option>
+            </select>
+
+            <label>City *</label>
+            <select name="city" id="city" required>
+                <option value="">Select a City</option>
+            </select>
+
+            <label>ZIP / Postal Code *</label>
+            <input type="text" name="zip" id="zip" required>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+    <script>
+        const apiToken = 'Ag7rwMIng1YeeF3a6YxzNMQUwRrLA4ZKBn0DNBPpxPpRkhyF3YzSdJoJxIx5kpOS54s';
+        let authToken = '';
+
+        // Fetch and populate countries
+        async function fetchCountries() {
+            try {
+                let response = await fetch('https://www.universal-tutorial.com/api/countries/', {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": `Bearer ${apiToken}`,
+                        "Accept": "application/json"
+                    }
+                });
+                let countries = await response.json();
+                let countrySelect = document.getElementById('country');
+
+                countries.forEach(country => {
+                    let option = document.createElement('option');
+                    option.value = country.country_name;
+                    option.text = country.country_name;
+                    countrySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching countries:", error);
+            }
+        }
+
+        // Fetch and populate states based on selected country
+        async function fetchStates(country) {
+            try {
+                let response = await fetch(`https://www.universal-tutorial.com/api/states/${country}`, {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": `Bearer ${apiToken}`,
+                        "Accept": "application/json"
+                    }
+                });
+                let states = await response.json();
+                let stateSelect = document.getElementById('state');
+                stateSelect.innerHTML = '<option value="">Select a State</option>'; // Reset state dropdown
+
+                states.forEach(state => {
+                    let option = document.createElement('option');
+                    option.value = state.state_name;
+                    option.text = state.state_name;
+                    stateSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching states:", error);
+            }
+        }
+
+        // Fetch and populate cities based on selected state
+        async function fetchCities(state) {
+            try {
+                let response = await fetch(`https://www.universal-tutorial.com/api/cities/${state}`, {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": `Bearer ${apiToken}`,
+                        "Accept": "application/json"
+                    }
+                });
+                let cities = await response.json();
+                let citySelect = document.getElementById('city');
+                citySelect.innerHTML = '<option value="">Select a City</option>'; // Reset city dropdown
+
+                cities.forEach(city => {
+                    let option = document.createElement('option');
+                    option.value = city.city_name;
+                    option.text = city.city_name;
+                    citySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching cities:", error);
+            }
+        }
+
+        // Event listeners for dropdown changes
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCountries(); // Populate countries on page load
+        });
+
+        document.getElementById('country').addEventListener('change', function() {
+            let country = this.value;
+            if (country) {
+                fetchStates(country); // Fetch states based on selected country
+                document.getElementById('city').innerHTML = '<option value="">Select a City</option>'; // Reset city dropdown
+            } else {
+                document.getElementById('state').innerHTML = '<option value="">Select a State</option>';
+                document.getElementById('city').innerHTML = '<option value="">Select a City</option>';
+            }
+        });
+
+        document.getElementById('state').addEventListener('change', function() {
+            let state = this.value;
+            if (state) {
+                fetchCities(state); // Fetch cities based on selected state
+            } else {
+                document.getElementById('city').innerHTML = '<option value="">Select a City</option>';
+            }
+        });
+    </script>
+</body>
+</html>

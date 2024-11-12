@@ -31,7 +31,7 @@
 
             <label>Country *</label>
             <select name="country" id="country" required>
-                <option value="">Select a Country</option>
+                <option value="US" selected>United States</option>
             </select>
 
             <label>State/Province *</label>
@@ -52,51 +52,34 @@
     </div>
 
     <script>
-        const apiToken = 'Ag7rwMIng1YeeF3a6YxzNMQUwRrLA4ZKBn0DNBPpxPpRkhyF3YzSdJoJxIx5kpOS54s';
-        let authToken = '';
+        const rapidApiKey = '7d95aac0d5msh11d5faaf9487d69p17991djsnc910d79fcaf5';
 
-        // Fetch and populate countries
-        async function fetchCountries() {
+        // Function to fetch and populate states for the US
+        async function fetchStates() {
             try {
-                let response = await fetch('https://www.universal-tutorial.com/api/countries/', {
+                let response = await fetch('https://wft-geo-db.p.rapidapi.com/v1/geo/countries/US/regions', {
                     method: 'GET',
                     headers: {
-                        "Authorization": `Bearer ${apiToken}`,
-                        "Accept": "application/json"
+                        'X-RapidAPI-Key': rapidApiKey,
+                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
                     }
                 });
-                let countries = await response.json();
-                let countrySelect = document.getElementById('country');
-
-                countries.forEach(country => {
-                    let option = document.createElement('option');
-                    option.value = country.country_name;
-                    option.text = country.country_name;
-                    countrySelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error("Error fetching countries:", error);
-            }
-        }
-
-        // Fetch and populate states based on selected country
-        async function fetchStates(country) {
-            try {
-                let response = await fetch(`https://www.universal-tutorial.com/api/states/${country}`, {
-                    method: 'GET',
-                    headers: {
-                        "Authorization": `Bearer ${apiToken}`,
-                        "Accept": "application/json"
-                    }
-                });
-                let states = await response.json();
+                
+                if (!response.ok) {
+                    console.error(`Error fetching states: ${response.status} ${response.statusText}`);
+                    const errorText = await response.text();
+                    console.error("Response body:", errorText);
+                    return;
+                }
+                
+                let data = await response.json();
                 let stateSelect = document.getElementById('state');
                 stateSelect.innerHTML = '<option value="">Select a State</option>'; // Reset state dropdown
 
-                states.forEach(state => {
+                data.data.forEach(state => {
                     let option = document.createElement('option');
-                    option.value = state.state_name;
-                    option.text = state.state_name;
+                    option.value = state.code;
+                    option.text = state.name;
                     stateSelect.appendChild(option);
                 });
             } catch (error) {
@@ -104,24 +87,32 @@
             }
         }
 
-        // Fetch and populate cities based on selected state
-        async function fetchCities(state) {
+        // Function to fetch and populate cities based on selected state in the US
+        async function fetchCities(stateCode) {
             try {
-                let response = await fetch(`https://www.universal-tutorial.com/api/cities/${state}`, {
+                let response = await fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries/US/regions/${stateCode}/cities`, {
                     method: 'GET',
                     headers: {
-                        "Authorization": `Bearer ${apiToken}`,
-                        "Accept": "application/json"
+                        'X-RapidAPI-Key': rapidApiKey,
+                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
                     }
                 });
-                let cities = await response.json();
+                
+                if (!response.ok) {
+                    console.error(`Error fetching cities: ${response.status} ${response.statusText}`);
+                    const errorText = await response.text();
+                    console.error("Response body:", errorText);
+                    return;
+                }
+                
+                let data = await response.json();
                 let citySelect = document.getElementById('city');
                 citySelect.innerHTML = '<option value="">Select a City</option>'; // Reset city dropdown
 
-                cities.forEach(city => {
+                data.data.forEach(city => {
                     let option = document.createElement('option');
-                    option.value = city.city_name;
-                    option.text = city.city_name;
+                    option.value = city.name;
+                    option.text = city.name;
                     citySelect.appendChild(option);
                 });
             } catch (error) {
@@ -129,26 +120,16 @@
             }
         }
 
-        // Event listeners for dropdown changes
+        // Populate states on page load
         document.addEventListener('DOMContentLoaded', () => {
-            fetchCountries(); // Populate countries on page load
+            fetchStates(); // Fetch states for the US when the page loads
         });
 
-        document.getElementById('country').addEventListener('change', function() {
-            let country = this.value;
-            if (country) {
-                fetchStates(country); // Fetch states based on selected country
-                document.getElementById('city').innerHTML = '<option value="">Select a City</option>'; // Reset city dropdown
-            } else {
-                document.getElementById('state').innerHTML = '<option value="">Select a State</option>';
-                document.getElementById('city').innerHTML = '<option value="">Select a City</option>';
-            }
-        });
-
+        // Event listener for when a state is selected
         document.getElementById('state').addEventListener('change', function() {
-            let state = this.value;
-            if (state) {
-                fetchCities(state); // Fetch cities based on selected state
+            let stateCode = this.value;
+            if (stateCode) {
+                fetchCities(stateCode); // Fetch cities based on selected state
             } else {
                 document.getElementById('city').innerHTML = '<option value="">Select a City</option>';
             }

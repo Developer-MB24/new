@@ -30,110 +30,107 @@
             <input type="tel" name="phone" maxlength="10" required>
 
             <label>Country *</label>
-            <select name="country" id="country" required>
-                <option value="US" selected>United States</option>
+            <select class="country" onchange="loadStates()" required>
+                <option value="">Select Country</option>
             </select>
 
             <label>State/Province *</label>
-            <select name="state" id="state" required>
-                <option value="">Select a State</option>
+            <select class="state" onchange="loadCities()" required>
+                <option value="">Select State</option>
             </select>
 
             <label>City *</label>
-            <select name="city" id="city" required>
-                <option value="">Select a City</option>
+            <select class="city" required>
+                <option value="">Select City</option>
             </select>
 
             <label>ZIP / Postal Code *</label>
-            <input type="text" name="zip" id="zip" required>
+            <input type="text" name="zip" required>
 
             <button type="submit">Send Message</button>
         </form>
     </div>
 
     <script>
-        const rapidApiKey = '7d95aac0d5msh11d5faaf9487d69p17991djsnc910d79fcaf5';
+        var config = {
+            cUrl: 'https://api.countrystatecity.in/v1/countries',
+            ckey: 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA==' // API key 
+        };
 
-        // Function to fetch and populate states for the US
-        async function fetchStates() {
-            try {
-                let response = await fetch('https://wft-geo-db.p.rapidapi.com/v1/geo/countries/US/regions', {
-                    method: 'GET',
-                    headers: {
-                        'X-RapidAPI-Key': rapidApiKey,
-                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
-                    }
+        var countrySelect = document.querySelector('.country'),
+            stateSelect = document.querySelector('.state'),
+            citySelect = document.querySelector('.city');
+
+        // Load countries into the country dropdown
+        function loadCountries() {
+            let apiEndPoint = config.cUrl;
+
+            fetch(apiEndPoint, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.iso2;
+                    option.textContent = country.name;
+                    countrySelect.appendChild(option);
                 });
-                
-                if (!response.ok) {
-                    console.error(`Error fetching states: ${response.status} ${response.statusText}`);
-                    const errorText = await response.text();
-                    console.error("Response body:", errorText);
-                    return;
-                }
-                
-                let data = await response.json();
-                let stateSelect = document.getElementById('state');
-                stateSelect.innerHTML = '<option value="">Select a State</option>'; // Reset state dropdown
+            })
+            .catch(error => console.error('Error loading countries:', error));
 
-                data.data.forEach(state => {
-                    let option = document.createElement('option');
-                    option.value = state.code;
-                    option.text = state.name;
+            stateSelect.disabled = true;
+            citySelect.disabled = true;
+            stateSelect.style.pointerEvents = 'none';
+            citySelect.style.pointerEvents = 'none';
+        }
+
+        // Load states into the state dropdown based on the selected country
+        function loadStates() {
+            stateSelect.disabled = false;
+            citySelect.disabled = true;
+            stateSelect.style.pointerEvents = 'auto';
+            citySelect.style.pointerEvents = 'none';
+
+            const selectedCountryCode = countrySelect.value;
+            stateSelect.innerHTML = '<option value="">Select State</option>'; // Clear existing state options
+            citySelect.innerHTML = '<option value="">Select City</option>'; // Clear existing city options
+
+            fetch(`${config.cUrl}/${selectedCountryCode}/states`, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state.iso2;
+                    option.textContent = state.name;
                     stateSelect.appendChild(option);
                 });
-            } catch (error) {
-                console.error("Error fetching states:", error);
-            }
+            })
+            .catch(error => console.error('Error loading states:', error));
         }
 
-        // Function to fetch and populate cities based on selected state in the US
-        async function fetchCities(stateCode) {
-            try {
-                let response = await fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries/US/regions/${stateCode}/cities`, {
-                    method: 'GET',
-                    headers: {
-                        'X-RapidAPI-Key': rapidApiKey,
-                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
-                    }
-                });
-                
-                if (!response.ok) {
-                    console.error(`Error fetching cities: ${response.status} ${response.statusText}`);
-                    const errorText = await response.text();
-                    console.error("Response body:", errorText);
-                    return;
-                }
-                
-                let data = await response.json();
-                let citySelect = document.getElementById('city');
-                citySelect.innerHTML = '<option value="">Select a City</option>'; // Reset city dropdown
+        // Load cities into the city dropdown based on the selected state
+        function loadCities() {
+            citySelect.disabled = false;
+            citySelect.style.pointerEvents = 'auto';
 
-                data.data.forEach(city => {
-                    let option = document.createElement('option');
+            const selectedCountryCode = countrySelect.value;
+            const selectedStateCode = stateSelect.value;
+            citySelect.innerHTML = '<option value="">Select City</option>'; // Clear existing city options
+
+            fetch(`${config.cUrl}/${selectedCountryCode}/states/${selectedStateCode}/cities`, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(city => {
+                    const option = document.createElement('option');
                     option.value = city.name;
-                    option.text = city.name;
+                    option.textContent = city.name;
                     citySelect.appendChild(option);
                 });
-            } catch (error) {
-                console.error("Error fetching cities:", error);
-            }
+            })
+            .catch(error => console.error('Error loading cities:', error));
         }
 
-        // Populate states on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchStates(); // Fetch states for the US when the page loads
-        });
-
-        // Event listener for when a state is selected
-        document.getElementById('state').addEventListener('change', function() {
-            let stateCode = this.value;
-            if (stateCode) {
-                fetchCities(stateCode); // Fetch cities based on selected state
-            } else {
-                document.getElementById('city').innerHTML = '<option value="">Select a City</option>';
-            }
-        });
+        // Load countries on page load
+        window.onload = loadCountries;
     </script>
 </body>
 </html>

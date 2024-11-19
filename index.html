@@ -29,6 +29,12 @@
             <label>Phone *</label>
             <input type="tel" name="phone" maxlength="10" required>
 
+            <label>Street Address *</label>
+            <input type="text" name="street_address" required>
+
+            <label>Apartment, Suite, etc. *</label>
+            <input type="text" name="apartment" required>
+
             <label>Country *</label>
             <select class="country" onchange="loadStates()" required>
                 <option value="">Select Country</option>
@@ -47,6 +53,25 @@
             <label>ZIP / Postal Code *</label>
             <input type="text" name="zip" required>
 
+            <label>Applying For *</label>
+            <select name="applying_for" required>
+                <option value="">Select Position</option>
+                <option value="Behavioral Health Technician (BHT)">Behavioral Health Technician (BHT)</option>
+                <option value="Caregiver">Caregiver</option>
+                <option value="Case Manager">Case Manager</option>
+                <option value="Certified Nursing Assistant (CNA)">Certified Nursing Assistant (CNA)</option>
+                <option value="Facility Manager">Facility Manager</option>
+                <option value="House Manager">House Manager</option>
+                <option value="Licensed Practical Nurse (LPN)">Licensed Practical Nurse (LPN)</option>
+                <option value="Registered Nursing Assistant (RNA)">Registered Nursing Assistant (RNA)</option>
+            </select>
+
+            <label>Upload File</label>
+            <input type="file" name="resume">
+
+            <label>Message</label>
+            <textarea name="message" rows="4"></textarea>
+
             <button type="submit">Send Message</button>
         </form>
     </div>
@@ -54,7 +79,7 @@
     <script>
         var config = {
             cUrl: 'https://api.countrystatecity.in/v1/countries',
-            ckey: 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA==' // API key 
+            ckey: 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA==' // API key
         };
 
         var countrySelect = document.querySelector('.country'),
@@ -63,9 +88,7 @@
 
         // Load countries into the country dropdown
         function loadCountries() {
-            let apiEndPoint = config.cUrl;
-
-            fetch(apiEndPoint, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            fetch(config.cUrl, {headers: {"X-CSCAPI-KEY": config.ckey}})
             .then(response => response.json())
             .then(data => {
                 data.forEach(country => {
@@ -76,27 +99,20 @@
                 });
             })
             .catch(error => console.error('Error loading countries:', error));
-
-            stateSelect.disabled = true;
-            citySelect.disabled = true;
-            stateSelect.style.pointerEvents = 'none';
-            citySelect.style.pointerEvents = 'none';
         }
 
-        // Load states into the state dropdown based on the selected country
+        // Load states into the state dropdown
         function loadStates() {
-            stateSelect.disabled = false;
-            citySelect.disabled = true;
-            stateSelect.style.pointerEvents = 'auto';
-            citySelect.style.pointerEvents = 'none';
+            stateSelect.innerHTML = '<option value="">Select State</option>';
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            const selectedCountry = countrySelect.value;
 
-            const selectedCountryCode = countrySelect.value;
-            stateSelect.innerHTML = '<option value="">Select State</option>'; 
-            citySelect.innerHTML = '<option value="">Select City</option>'; 
+            if (!selectedCountry) return;
 
-            fetch(`${config.cUrl}/${selectedCountryCode}/states`, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            fetch(`${config.cUrl}/${selectedCountry}/states`, {headers: {"X-CSCAPI-KEY": config.ckey}})
             .then(response => response.json())
             .then(data => {
+                data.sort((a, b) => a.name.localeCompare(b.name));
                 data.forEach(state => {
                     const option = document.createElement('option');
                     option.value = state.iso2;
@@ -107,18 +123,18 @@
             .catch(error => console.error('Error loading states:', error));
         }
 
-        // Load cities into the city dropdown based on the selected state
+        // Load cities into the city dropdown
         function loadCities() {
-            citySelect.disabled = false;
-            citySelect.style.pointerEvents = 'auto';
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            const selectedCountry = countrySelect.value;
+            const selectedState = stateSelect.value;
 
-            const selectedCountryCode = countrySelect.value;
-            const selectedStateCode = stateSelect.value;
-            citySelect.innerHTML = '<option value="">Select City</option>'; 
+            if (!selectedState) return;
 
-            fetch(`${config.cUrl}/${selectedCountryCode}/states/${selectedStateCode}/cities`, {headers: {"X-CSCAPI-KEY": config.ckey}})
+            fetch(`${config.cUrl}/${selectedCountry}/states/${selectedState}/cities`, {headers: {"X-CSCAPI-KEY": config.ckey}})
             .then(response => response.json())
             .then(data => {
+                data.sort((a, b) => a.name.localeCompare(b.name));
                 data.forEach(city => {
                     const option = document.createElement('option');
                     option.value = city.name;

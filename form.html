@@ -16,7 +16,7 @@
             Ready to hire? Share a few details with us, and First Contact will take care of the rest. Let us find the perfect fit to strengthen your team!
         </p>
 
-        <form action="#" method="POST" enctype="multipart/form-data">
+        <form action="https://formspree.io/f/xdkodzab" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label>First Name *</label>
@@ -41,21 +41,108 @@
             <input type="url" name="website" required>
 
             <label>Title of Position *</label>
-            <input type="text" name="position_title" required>
+            <select name="position_title" required>
+                <option value="title">Select Title</option>
+                <option value="Baby Sitter">Baby Sitter</option>
+                <option value="Behavioral Health Technician">Behavioral Health Technician</option>
+                <option value="Case Manager">Case Manager</option>
+                <option value="Certified Caregiver">Certified Caregiver</option>
+                <option value="Concierge">Concierge</option>
+                <option value="Dog Sitter">Dog Sitter</option>
+                <option value="Facility Manager/ License 200">Facility Manager/ License 200</option>
+                <option value="Homecare/Homemaker">Homecare/Homemaker</option>
+                <option value="House Keeping">House Keeping</option>
+                <option value="House Manager">House Manager</option>
+                <option value="Hospitality">Hospitality</option>
+                <option value="IT">IT</option>
+                <option value="Licensed Practical Nurse (LPN)">Licensed Practical Nurse (LPN)</option>
+                <option value="Medical Assistant">Medical Assistant</option>
+                <option value="Registered Nurse">Registered Nurse</option>
+                <option value="Registered Nursing Assistant">Registered Nursing Assistant</option>
+                <option value="Servers">Servers</option>
+                <option value="Therapist">Therapist</option>
+            </select>
+              
+            <label>Salary/Payrate *</label>
+            <select name="salary" required>
+                <option value="salary">Select Salary</option>
+                <option value="$25/Hour (Dog Sitter)">$25/Hour (Dog Sitter)</option>
+                <option value="$28/Hour (Baby Sitter)">$28/Hour (Baby Sitter)</option>
+                <option value="$30/Hour (BHT, Server, Concierge)">$30/Hour (BHT, Server, Concierge)</option>
+                <option value="$35/Hour (Certified Caregiver, CNA, House Keeping)">$35/Hour (Certified Caregiver, CNA, House Keeping)</option>
+                <option value="$45/Hour (Homemaker, Medical Assistant)">$45/Hour (Homemaker, Medical Assistant)</option>
+                <option value="$60/Hour (RNA)">$60/Hour (RNA)</option>
+                <option value="$95/Hour (Therapist, RN)">$95/Hour (Therapist, RN)</option>
+                <option value="$150/Hour (IT)">$150/Hour (IT)</option>
+            </select>
 
             <label>Position Type *</label>
             <select name="position_type" required>
+                <option value="position">Select Position</option>
                 <option value="Temporary">Temporary</option>
                 <option value="Permanent">Permanent</option>
-                <option value="Contract">Contract</option>
-                <!-- Add more options if necessary -->
+                <option value="Executive">Executive</option>
+                <option value="Payrolling">Payrolling</option>
             </select>
 
             <label>Position Location *</label>
-            <input type="text" name="position_location" required placeholder="Remote or specify location">
+            <select name="position_location" required>
+                
+                <option value="location">Select Location</option>
+                <option value="Remote">Remote</option>
+                <option value="Alabama">Alabama</option>
+                <option value="Alaska">Alaska</option>
+                <option value="Arizona">Arizona</option>
+                <option value="Arkansas">Arkansas</option>
+                <option value="California">California</option>
+                <option value="Colorado">Colorado</option>
+                <option value="Connecticut">Connecticut</option>
+                <option value="Delaware">Delaware</option>
+                <option value="Florida">Florida</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Hawaii">Hawaii</option>
+                <option value="Idaho">Idaho</option>
+                <option value="Illinois">Illinois</option>
+                <option value="Indiana">Indiana</option>
+                <option value="Iowa">Iowa</option>
+                <option value="Kansas">Kansas</option>
+                <option value="Kentucky">Kentucky</option>
+                <option value="Louisiana">Louisiana</option>
+                <option value="Maine">Maine</option>
+                <option value="Maryland">Maryland</option>
+                <option value="Massachusetts">Massachusetts</option>
+                <option value="Michigan">Michigan</option>
+                <option value="Minnesota">Minnesota</option>
+                <option value="Mississippi">Mississippi</option>
+                <option value="Missouri">Missouri</option>
+                <option value="Montana">Montana</option>
+                <option value="Nebraska">Nebraska</option>
+                <option value="Nevada">Nevada</option>
+                <option value="New Hampshire">New Hampshire</option>
+                <option value="New Jersey">New Jersey</option>
+                <option value="New Mexico">New Mexico</option>
+                <option value="New York">New York</option>
+                <option value="North Carolina">North Carolina</option>
+                <option value="North Dakota">North Dakota</option>
+                <option value="Ohio">Ohio</option>
+                <option value="Oklahoma">Oklahoma</option>
+                <option value="Oregon">Oregon</option>
+                <option value="Pennsylvania">Pennsylvania</option>
+                <option value="Rhode Island">Rhode Island</option>
+                <option value="South Carolina">South Carolina</option>
+                <option value="South Dakota">South Dakota</option>
+                <option value="Tennessee">Tennessee</option>
+                <option value="Texas">Texas</option>
+                <option value="Utah">Utah</option>
+                <option value="Vermont">Vermont</option>
+                <option value="Virginia">Virginia</option>
+                <option value="Washington">Washington</option>
+                <option value="West Virginia">West Virginia</option>
+                <option value="Wisconsin">Wisconsin</option>
+                <option value="Wyoming">Wyoming</option>
+            </select>
 
-            <label>Salary/Payrate *</label>
-            <input type="text" name="salary" required>
+            
 
             <label>Upload Job Description if Available</label>
             <input type="file" name="job_description" accept=".pdf,.doc,.docx">

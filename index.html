@@ -11,7 +11,7 @@
         <h2>Join our team, where every day is an opportunity to impact lives positively.</h2>
         <p>We’re looking for dedicated individuals who value growth, teamwork, and compassion. Apply now to be part of a supportive community and advance your career!</p>
 
-        <form action="https://formspree.io/f/mwpkqvnb" method="POST" enctype="multipart/form-data">
+        <form action="https://formspree.io/f/xdkodzab" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label>First Name *</label>
@@ -91,8 +91,8 @@
             citySelect.style.pointerEvents = 'none';
 
             const selectedCountryCode = countrySelect.value;
-            stateSelect.innerHTML = '<option value="">Select State</option>'; // Clear existing state options
-            citySelect.innerHTML = '<option value="">Select City</option>'; // Clear existing city options
+            stateSelect.innerHTML = '<option value="">Select State</option>'; 
+            citySelect.innerHTML = '<option value="">Select City</option>'; 
 
             fetch(`${config.cUrl}/${selectedCountryCode}/states`, {headers: {"X-CSCAPI-KEY": config.ckey}})
             .then(response => response.json())
@@ -114,7 +114,7 @@
 
             const selectedCountryCode = countrySelect.value;
             const selectedStateCode = stateSelect.value;
-            citySelect.innerHTML = '<option value="">Select City</option>'; // Clear existing city options
+            citySelect.innerHTML = '<option value="">Select City</option>'; 
 
             fetch(`${config.cUrl}/${selectedCountryCode}/states/${selectedStateCode}/cities`, {headers: {"X-CSCAPI-KEY": config.ckey}})
             .then(response => response.json())
